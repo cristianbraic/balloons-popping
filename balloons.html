@@ -747,6 +747,24 @@ function gameLoop(time) {
       balloons.splice(i, 1);
       continue;
     }
+
+    // Balloon-to-balloon collision — push apart
+    for (let j = i - 1; j >= 0; j--) {
+      const o = balloons[j];
+      const dx = o.x - b.x;
+      const dy = o.y - b.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const minDist = (b.r + o.r) * 1.1;
+      if (dist < minDist && dist > 0) {
+        const push = (minDist - dist) * 0.3;
+        const nx = dx / dist;
+        const ny = dy / dist;
+        b.x -= nx * push;
+        b.y -= ny * push;
+        o.x += nx * push;
+        o.y += ny * push;
+      }
+    }
     drawBalloon(b);
   }
 
